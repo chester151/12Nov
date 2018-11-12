@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal">
+
+    <TextView
+        android:id="@+id/lblStorey"
+        android:layout_width="102dp"
+        android:layout_height="19dp"
+        android:layout_marginEnd="12dp"
+        android:layout_marginBottom="60dp"
+        android:text="storey"
+        app:layout_constraintBottom_toTopOf="@+id/lblListingPrice"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <ImageView
+        android:id="@+id/imageViewRental"
+        android:layout_width="121dp"
+        android:layout_height="133dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/lblListingTitle"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
+        app:srcCompat="@android:drawable/btn_dialog" />
+
+    <TextView
+        android:id="@+id/lblListingTitle"
+        android:layout_width="230dp"
+        android:layout_height="24dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="12dp"
+        android:text="title"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/lblListingType"
+        android:layout_width="122dp"
+        android:layout_height="19dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="6dp"
+        android:layout_marginBottom="8dp"
+        android:text="listingType"
+        app:layout_constraintBottom_toTopOf="@+id/lblFlatType"
+        app:layout_constraintEnd_toStartOf="@+id/lblStorey"
+        app:layout_constraintStart_toEndOf="@+id/imageViewRental" />
+
+    <TextView
+        android:id="@+id/lblFlatType"
+        android:layout_width="122dp"
+        android:layout_height="19dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="119dp"
+        android:layout_marginBottom="11dp"
+        android:text="flatType"
+        app:layout_constraintBottom_toTopOf="@+id/lblListingZone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/imageViewRental" />
+
+    <TextView
+        android:id="@+id/lblListingZone"
+        android:layout_width="122dp"
+        android:layout_height="19dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="120dp"
+        android:layout_marginBottom="9dp"
+        android:text="zone"
+        app:layout_constraintBottom_toTopOf="@+id/lblListingModel"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/imageViewRental" />
+
+    <TextView
+        android:id="@+id/lblListingModel"
+        android:layout_width="122dp"
+        android:layout_height="19dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="10dp"
+        android:text="Model"
+        app:layout_constraintBottom_toBottomOf="@+id/lblListingPrice"
+        app:layout_constraintEnd_toStartOf="@+id/lblListingPrice"
+        app:layout_constraintStart_toEndOf="@+id/imageViewRental" />
+
+    <TextView
+        android:id="@+id/lblListingPrice"
+        android:layout_width="102dp"
+        android:layout_height="22dp"
+        android:layout_marginEnd="12dp"
+        android:text="Price"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/imageViewRental"
+        app:layout_constraintEnd_toEndOf="parent" />
+</android.support.constraint.ConstraintLayout>

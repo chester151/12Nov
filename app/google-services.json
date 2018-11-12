@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "355813484610",
+    "firebase_url": "https://loginsystem-2c4d3.firebaseio.com",
+    "project_id": "loginsystem-2c4d3",
+    "storage_bucket": "loginsystem-2c4d3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:355813484610:android:24b34c081d7796a9",
+        "android_client_info": {
+          "package_name": "com.example.yeohf.loginsystem"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "355813484610-r3g66olf9hmv2hksp18aoqc3gm4i4pdg.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.yeohf.loginsystem",
+            "certificate_hash": "173c64f9e222771241b9d15e0a97b098a9fcf850"
+          }
+        },
+        {
+          "client_id": "355813484610-im0755mdqcfci83prtmen94e5ped5vu6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAwcvCCB0polk9-OvADDcO6d-FXT5rZXPI"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "355813484610-im0755mdqcfci83prtmen94e5ped5vu6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

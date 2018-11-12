@@ -1,0 +1,96 @@
+<resources>
+    <string name="app_name">Property Manager</string>
+    <string-array name="choices">
+        <item>Select type of Amenity</item>
+        <item>Shopping Malls</item>
+        <item>Banks</item>
+        <item>Clinics</item>
+        <item>Restaurants</item>
+        <item>Schools</item>
+    </string-array>
+
+    <string-array name="zone">
+        <item>BEDOK</item>
+        <item>BISHAN</item>
+        <item>BUKIT BATOK</item>
+        <item>BUKIT MERAH</item>
+        <item>BUKIT PANJANG</item>
+        <item>BUKIT TIMAH</item>
+        <item>CENTRAL AREA</item>
+        <item>CHOA CHU KANG</item>
+        <item>CLEMENTI</item>
+        <item>GEYLANG</item>
+        <item>HOUGANG</item>
+        <item>JURONG EAST</item>
+        <item>JURONG WEST</item>
+        <item>KALLANG/WHAMPOA</item>
+        <item>MARINE PARADE</item>
+        <item>PASIR RIS</item>
+        <item>PUNGGOL</item>
+        <item>QUEENSTOWN</item>
+        <item>SEMBAWANG</item>
+        <item>SENGKANG</item>
+        <item>SERANGOON</item>
+        <item>TAMPINES</item>
+        <item>TOA PAYOH</item>
+        <item>WOODLANDS</item>
+        <item>YISHUN</item>
+    </string-array>
+
+    <string-array name="storey">
+        <item>01 TO 03</item>
+        <item>04 TO 06</item>
+        <item>07 TO 09</item>
+        <item>10 TO 12</item>
+        <item>13 TO 15</item>
+        <item>16 TO 18</item>
+        <item>19 TO 21</item>
+        <item>22 TO 24</item>
+        <item>25 TO 27</item>
+        <item>28 TO 30</item>
+        <item>31 TO 33</item>
+        <item>34 TO 36</item>
+        <item>37 TO 39</item>
+        <item>40 TO 42</item>
+        <item>43 TO 45</item>
+        <item>46 TO 48</item>
+        <item>49 TO 51</item>
+    </string-array>
+
+    <string-array name="type">
+        <item>2 ROOM</item>
+        <item>3 ROOM</item>
+        <item>4 ROOM</item>
+        <item>5 ROOM</item>
+        <item>EXECUTIVE</item>
+        <item>MULTI-GENERATION</item>
+    </string-array>
+
+    <string-array name="model">
+        <item>Adjoined flat</item>
+        <item>Apartment</item>
+        <item>DBSS</item>
+        <item>Improved</item>
+        <item>Improved-Maisonette</item>
+        <item>Maisonette</item>
+        <item>Model A</item>
+        <item>Model A-Maisonette</item>
+        <item>Model A2</item>
+        <item>Multi Generation</item>
+        <item>New Generation</item>
+        <item>Premium Apartment</item>
+        <item>Premium Apartment Loft</item>
+        <item>Premium Maisonette</item>
+        <item>Simplified</item>
+        <item>Standard</item>
+        <item>Terrace</item>
+        <item>Type S1</item>
+        <item>Type S2</item>
+    </string-array>
+
+
+    <string name="myflat">My Flat</string>
+    <string name="home">Home</string>
+    <string name="sell">Sell</string>
+    <string name="profile">My Profile</string>
+</resources>
