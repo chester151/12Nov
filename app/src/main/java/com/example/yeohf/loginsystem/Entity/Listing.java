@@ -1,6 +1,6 @@
 package com.example.yeohf.loginsystem.Entity;
 
-public class Rental {
+public class Listing {
 
     public String rentalid;
     public String address;
@@ -21,10 +21,10 @@ public class Rental {
 
 
 
-    public Rental(){
+    public Listing(){
     }
 
-    public Rental(String id, String title, String address, String model, String listingType, String zone, String type, String storey, String price, String imagePath, String chatid, String userid, String key, double lat, double lng) {
+    public Listing(String id, String title, String address, String model, String listingType, String zone, String type, String storey, String price, String imagePath, String chatid, String userid, String key, double lat, double lng) {
         this.address = address;
         this.price = price;
         this.rentalid= id;

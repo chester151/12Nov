@@ -2,6 +2,7 @@ package com.example.yeohf.loginsystem;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -19,7 +20,9 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.yeohf.loginsystem.Entity.Rental;
+import com.example.yeohf.loginsystem.Adapters.RentalPriceEstimateAdapter;
+import com.example.yeohf.loginsystem.Entity.JSONModel;
+import com.example.yeohf.loginsystem.Entity.Listing;
 import com.example.yeohf.loginsystem.Helper.PricePrediction;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.AutocompleteFilter;
@@ -39,9 +42,9 @@ import com.google.firebase.storage.UploadTask;
 
 import java.util.UUID;
 
-public class CreateListingActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener{
+public class CreateListingActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
     ImageButton image;
-    String downloadUrl;
+    String downloadUrl = "";
     TextView estimatedprice;
     Button submit, predictprice;
     EditText title, price;
@@ -53,7 +56,7 @@ public class CreateListingActivity extends AppCompatActivity implements BottomNa
     FirebaseDatabase db;
     double lat, lng;
     String address;
-    Rental rentalObj;
+    Listing rentalObj;
     RadioGroup listingType;
     FirebaseAuth mAuth;
     FirebaseUser firebaseuser;
@@ -73,15 +76,15 @@ public class CreateListingActivity extends AppCompatActivity implements BottomNa
         title = findViewById(R.id.inputTitle);
         predictprice = findViewById(R.id.btnEstimatePrice);
         listingType = findViewById(R.id.rentalresaleradio2);
-        mAuth=FirebaseAuth.getInstance();
-        firebaseuser=mAuth.getCurrentUser();
+        mAuth = FirebaseAuth.getInstance();
+        firebaseuser = mAuth.getCurrentUser();
 
         bottomNavigationView = findViewById(R.id.navigation_view3);
         bottomNavigationView.setOnNavigationItemSelectedListener(this);
-        for(int i=0;i<bottomNavigationView.getMenu().size();i++){
+        for (int i = 0; i < bottomNavigationView.getMenu().size(); i++) {
             bottomNavigationView.getMenu().getItem(i).setChecked(false);
         }
-        MenuItem menuitem= bottomNavigationView.getMenu().findItem(R.id.sellicon);
+        MenuItem menuitem = bottomNavigationView.getMenu().findItem(R.id.sellicon);
         menuitem.setChecked(true);
 
         ref = FirebaseDatabase.getInstance().getReference("Rentals");
@@ -119,11 +122,13 @@ public class CreateListingActivity extends AppCompatActivity implements BottomNa
         typeadapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         model.setAdapter(modeladapter);
     }
+
     public void uploadImage(View view) {
         Intent intent = new Intent(Intent.ACTION_PICK);
         intent.setType("image/*");
         startActivityForResult(intent, gallery_intent);
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -144,14 +149,15 @@ public class CreateListingActivity extends AppCompatActivity implements BottomNa
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
-                    Toast.makeText(getApplicationContext(), "Uploaded failed.. Try again.", Toast.LENGTH_SHORT);
+                    Toast.makeText(getApplicationContext(), "Upload failed.. Try again.", Toast.LENGTH_SHORT);
 
                 }
             });
         }
     }
+
     private void getValues() {
-        rentalObj = new Rental();
+        rentalObj = new Listing();
         String uniqueID = UUID.randomUUID().toString();
         String chatId = UUID.randomUUID().toString();
         RadioButton listtype = findViewById(listingType.getCheckedRadioButtonId());
@@ -170,34 +176,42 @@ public class CreateListingActivity extends AppCompatActivity implements BottomNa
         rentalObj.setChatId(chatId);
         rentalObj.setUserid(firebaseuser.getUid());
     }
+
     public void estimatePrice(View view) {
-        PricePrediction pp = new PricePrediction(zone.getSelectedItem().toString(), type.getSelectedItem().toString(), storey.getSelectedItem().toString(), model.getSelectedItem().toString(), 80);
-        double getprice = pp.getPrice();
-        estimatedprice.setText("$" + getprice);
+        RadioButton listtype = findViewById(listingType.getCheckedRadioButtonId());
+        if (listtype.getText().toString().equals("Rental")) {
+            Bundle bundle = new Bundle();
+            bundle.putString("zone", zone.getSelectedItem().toString());
+            Intent intent = new Intent(CreateListingActivity.this, RentalEstimatePrice.class);
+            intent.putExtras(bundle);
+            startActivity(intent);
+        } else {
+            PricePrediction pp = new PricePrediction(zone.getSelectedItem().toString(), type.getSelectedItem().toString(), storey.getSelectedItem().toString(), model.getSelectedItem().toString(), 80);
+            double getprice = pp.getPrice();
+            String priceformat = String.format("%.2f", getprice);
+            estimatedprice.setText("$" + priceformat);
+        }
     }
+
     public void createListing(View view) {
-        getValues();
-        String id = ref.push().getKey();
-        ref.child(id).setValue(rentalObj);
-        ref.child(id).child("key").setValue(id);
-        Intent intent = new Intent(CreateListingActivity.this, MainActivity.class);
-        startActivity(intent);
-        Toast.makeText(getApplicationContext(), "Listing created!", Toast.LENGTH_SHORT);
-       /* ref.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+        if (title.getText().toString().equals("") || price.getText().toString().equals("")
+                || address.equals("") || downloadUrl.equals("")) {
+            Toast.makeText(getApplicationContext(), "Some of the fields are empty. Please ensure that all fields are filled in, including the picture!", Toast.LENGTH_LONG).show();
+
+        } else {
             getValues();
-            FirebaseDatabase.getInstance().getReference("Rentals").push().setValue(rentalObj);
-            Toast.makeText(getApplicationContext(), "Listing created!", Toast.LENGTH_SHORT);
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-            }
-        });*/
+            String id = ref.push().getKey();
+            ref.child(id).setValue(rentalObj);
+            ref.child(id).child("key").setValue(id);
+            Intent intent = new Intent(CreateListingActivity.this, MainActivity.class);
+            startActivity(intent);
+            Toast.makeText(getApplicationContext(), "Listing created!", Toast.LENGTH_SHORT).show();
+        }
     }
+
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        for(int i=0;i<bottomNavigationView.getMenu().size();i++){
+        for (int i = 0; i < bottomNavigationView.getMenu().size(); i++) {
             bottomNavigationView.getMenu().getItem(i).setChecked(false);
         }
 
@@ -206,12 +220,12 @@ public class CreateListingActivity extends AppCompatActivity implements BottomNa
             case R.id.homeicon:
 
                 Toast.makeText(getApplicationContext(), "You are now at the Home Page!", Toast.LENGTH_SHORT).show();
-                startActivity (new Intent (CreateListingActivity.this,MainActivity.class));
+                startActivity(new Intent(CreateListingActivity.this, MainActivity.class));
                 break;
 
             case R.id.flatinfoicon:
                 Toast.makeText(getApplicationContext(), "You may edit your flat listings!", Toast.LENGTH_SHORT).show();
-                startActivity (new Intent (CreateListingActivity.this,MyRentalActivity.class));
+                startActivity(new Intent(CreateListingActivity.this, MyRentalActivity.class));
                 break;
 
             case R.id.sellicon:
@@ -219,8 +233,10 @@ public class CreateListingActivity extends AppCompatActivity implements BottomNa
                 break;
             case R.id.profileicon:
                 Toast.makeText(getApplicationContext(), "You", Toast.LENGTH_SHORT).show();
-                startActivity (new Intent (CreateListingActivity.this,ProfileActivity.class));
+                startActivity(new Intent(CreateListingActivity.this, ProfileActivity.class));
         }
         return true;
     }
+
+
 }

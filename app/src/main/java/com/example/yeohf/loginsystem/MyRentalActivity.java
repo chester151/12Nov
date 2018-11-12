@@ -1,12 +1,8 @@
 package com.example.yeohf.loginsystem;
 
-import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.annotation.NonNull;
-import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.BottomNavigationView;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -22,8 +18,8 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.example.yeohf.loginsystem.Adapters.RentalListAdapter;
-import com.example.yeohf.loginsystem.Entity.Rental;
+import com.example.yeohf.loginsystem.Adapters.ListingListAdapter;
+import com.example.yeohf.loginsystem.Entity.Listing;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -36,16 +32,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MyRentalActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
-    private static final String TAG ="In Rental Activity!" ;
+    private static final String TAG = "In Rental Activity!";
 
     private Toolbar mToolbar;
     private FirebaseAuth mAuth;
     ListView listViewOverallRentals;
     FirebaseUser currentuser;
-    List<Rental> overall_rentallist;
+    List<Listing> overall_rentallist;
     DatabaseReference database_allref;
     EditText searchRental;
-    RentalListAdapter adapter;
+    ListingListAdapter adapter;
     Menu menu;
     Button delbtn;
     Button editbtn;
@@ -56,17 +52,17 @@ public class MyRentalActivity extends AppCompatActivity implements BottomNavigat
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_rental2);
-        Log.d(TAG,"OnCreate: ");
+        Log.d(TAG, "OnCreate: ");
         overall_rentallist = new ArrayList<>();
         mAuth = FirebaseAuth.getInstance();
         currentuser = mAuth.getCurrentUser();
         database_allref = FirebaseDatabase.getInstance().getReference("Rentals");
         listViewOverallRentals = findViewById(R.id.myrentalsList);
-        delbtn= (Button)findViewById(R.id.delbtn);
-        editbtn= (Button)findViewById(R.id.editbtn);
+        delbtn = (Button) findViewById(R.id.delbtn);
+        editbtn = (Button) findViewById(R.id.editbtn);
 
 
-        final List<String> editname= new ArrayList<String>();
+        final List<String> editname = new ArrayList<String>();
         editname.add("");
         editname.add("Title");
         editname.add("Price");
@@ -74,10 +70,10 @@ public class MyRentalActivity extends AppCompatActivity implements BottomNavigat
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.navigation_view2);
         bottomNavigationView.setOnNavigationItemSelectedListener(this);
-        for(int i=0;i<bottomNavigationView.getMenu().size();i++){
+        for (int i = 0; i < bottomNavigationView.getMenu().size(); i++) {
             bottomNavigationView.getMenu().getItem(i).setChecked(false);
         }
-        MenuItem menuitem= bottomNavigationView.getMenu().findItem(R.id.flatinfoicon);
+        MenuItem menuitem = bottomNavigationView.getMenu().findItem(R.id.flatinfoicon);
         menuitem.setChecked(true);
 
         listViewOverallRentals.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -106,11 +102,11 @@ public class MyRentalActivity extends AppCompatActivity implements BottomNavigat
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 overall_rentallist.clear();
-                final List<String> rentalname= new ArrayList<String>();
+                final List<String> rentalname = new ArrayList<String>();
                 Iterable<DataSnapshot> child = dataSnapshot.getChildren();
                 for (DataSnapshot uniquesnap : child) {
-                        Rental rental = uniquesnap.getValue(Rental.class);
-                        if(rental.getUserid().equals(currentuser.getUid())){
+                    Listing rental = uniquesnap.getValue(Listing.class);
+                    if (rental.getUserid().equals(currentuser.getUid())) {
                         overall_rentallist.add(rental);
                         rentalname.add(rental.getTitle());
                     }
@@ -123,14 +119,15 @@ public class MyRentalActivity extends AppCompatActivity implements BottomNavigat
                     }
                 }*/
                 // Toast.makeText(getApplicationContext(), "Cool!", Toast.LENGTH_SHORT).show();
-                adapter = new RentalListAdapter(MyRentalActivity.this, overall_rentallist);
+                adapter = new ListingListAdapter(MyRentalActivity.this, overall_rentallist);
                 listViewOverallRentals.setAdapter(adapter);
-                delspinner= (Spinner)findViewById(R.id.spinner);
+                delspinner = (Spinner) findViewById(R.id.spinner);
                 ArrayAdapter<String> nameAdapter = new ArrayAdapter<String>(MyRentalActivity.this, android.R.layout.simple_spinner_item, rentalname);
                 nameAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 delspinner.setAdapter(nameAdapter);
 
             }
+
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
@@ -140,23 +137,23 @@ public class MyRentalActivity extends AppCompatActivity implements BottomNavigat
         editbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                if (delspinner.getSelectedItem() != null) {
                 final String text = delspinner.getSelectedItem().toString();
-                final String key="key";
-                String rentalkey="";
-                for(int i =0;i<overall_rentallist.size();i++){
-                    if (overall_rentallist.get(i).getTitle().equals(text)){
-                        rentalkey=overall_rentallist.get(i).getKey();
-                        break;
+                final String key = "key";
+                String rentalkey = "";
+                    for (int i = 0; i < overall_rentallist.size(); i++) {
+                        if (overall_rentallist.get(i).getTitle().equals(text)) {
+                            rentalkey = overall_rentallist.get(i).getKey();
+                            break;
+                        }
                     }
-
+                    final String rentalkey2 = rentalkey;
+                    Intent intent = new Intent(MyRentalActivity.this, EditListingActivity.class);
+                    intent.putExtra(key, rentalkey2);
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(getApplicationContext(), "Nothing in the list!", Toast.LENGTH_SHORT).show();
                 }
-                final String rentalkey2= rentalkey;
-
-                Intent intent=new Intent(MyRentalActivity.this,EditListingActivity.class);
-                intent.putExtra(key,rentalkey2);
-                startActivity(intent);
-
             }
 
         });
@@ -225,32 +222,31 @@ public class MyRentalActivity extends AppCompatActivity implements BottomNavigat
         delbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               final String text = delspinner.getSelectedItem().toString();
-
-
-
-
-                database_allref.addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        Iterable<DataSnapshot> child = dataSnapshot.getChildren();
-                        for (DataSnapshot uniquesnap : child) {
-                            Rental rental = uniquesnap.getValue(Rental.class);
-                            if(rental.getTitle().equals(text)){
-                                uniquesnap.getRef().removeValue();
+                if (delspinner.getSelectedItem() != null) {
+                    final String text = delspinner.getSelectedItem().toString();
+                    database_allref.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            Iterable<DataSnapshot> child = dataSnapshot.getChildren();
+                            for (DataSnapshot uniquesnap : child) {
+                                Listing rental = uniquesnap.getValue(Listing.class);
+                                if (rental.getTitle().equals(text)) {
+                                    uniquesnap.getRef().removeValue();
+                                }
                             }
                         }
-                    }
 
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
 
-                    }
-                });
-
-
-            }});
+                        }
+                    });
+                } else {
+                    Toast.makeText(getApplicationContext(), "Nothing in the list!", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
 
 
     }
@@ -260,7 +256,7 @@ public class MyRentalActivity extends AppCompatActivity implements BottomNavigat
         switch (item.getItemId()) {
             case R.id.homeicon:
                 Toast.makeText(getApplicationContext(), "You are now at the Home Page!", Toast.LENGTH_SHORT).show();
-                startActivity (new Intent (MyRentalActivity.this,MainActivity.class));
+                startActivity(new Intent(MyRentalActivity.this, MainActivity.class));
                 break;
 
             case R.id.flatinfoicon:
@@ -270,11 +266,11 @@ public class MyRentalActivity extends AppCompatActivity implements BottomNavigat
 
             case R.id.sellicon:
                 Toast.makeText(getApplicationContext(), "You are now at the Create Listing Page!", Toast.LENGTH_SHORT).show();
-                startActivity (new Intent (MyRentalActivity.this,CreateListingActivity.class));
+                startActivity(new Intent(MyRentalActivity.this, CreateListingActivity.class));
                 break;
             case R.id.profileicon:
                 Toast.makeText(getApplicationContext(), "You", Toast.LENGTH_SHORT).show();
-                startActivity (new Intent (MyRentalActivity.this,ProfileActivity.class));
+                startActivity(new Intent(MyRentalActivity.this, ProfileActivity.class));
         }
         return true;
     }

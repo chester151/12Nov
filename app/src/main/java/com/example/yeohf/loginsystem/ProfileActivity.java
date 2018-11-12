@@ -23,7 +23,7 @@ import com.google.firebase.database.ValueEventListener;
 public class ProfileActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
 
     private TextView profilename, profilecontact, profileemail;
-    private Button btnupdateprofile, btngoback,btnchangemailpass;
+    private Button btnupdateprofile, btngoback, btnchangemailpass;
     private ImageView profiledp;
     private FirebaseAuth firebaseAuth;
     private FirebaseDatabase firebaseDatabase;
@@ -39,21 +39,21 @@ public class ProfileActivity extends AppCompatActivity implements BottomNavigati
 
         bottomNavigationView = findViewById(R.id.navigation_view4);
         bottomNavigationView.setOnNavigationItemSelectedListener(this);
-        for(int i=0;i<bottomNavigationView.getMenu().size();i++){
+        for (int i = 0; i < bottomNavigationView.getMenu().size(); i++) {
             bottomNavigationView.getMenu().getItem(i).setChecked(false);
         }
-        MenuItem menuitem= bottomNavigationView.getMenu().findItem(R.id.profileicon);
+        MenuItem menuitem = bottomNavigationView.getMenu().findItem(R.id.profileicon);
         menuitem.setChecked(true);
 
 
-        firebaseAuth= FirebaseAuth.getInstance();
-        firebaseDatabase=FirebaseDatabase.getInstance();
-        myref= firebaseDatabase.getReference("Users").child((firebaseAuth.getUid()));
-        DatabaseReference databaseReference= myref;
+        firebaseAuth = FirebaseAuth.getInstance();
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        myref = firebaseDatabase.getReference("Users").child((firebaseAuth.getUid()));
+        DatabaseReference databaseReference = myref;
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                UserProfile userprofile=dataSnapshot.getValue(UserProfile.class);
+                UserProfile userprofile = dataSnapshot.getValue(UserProfile.class);
                 profilename.setText(userprofile.getUserName());
                 profilecontact.setText(userprofile.getUserContact());
                 profileemail.setText(userprofile.getUserEmail());
@@ -61,11 +61,10 @@ public class ProfileActivity extends AppCompatActivity implements BottomNavigati
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                Toast.makeText(ProfileActivity.this, databaseError.getCode(),Toast.LENGTH_SHORT).show();
+                Toast.makeText(ProfileActivity.this, databaseError.getCode(), Toast.LENGTH_SHORT).show();
 
             }
         });
-
 
 
         btnupdateprofile.setOnClickListener(new View.OnClickListener() {
@@ -83,7 +82,6 @@ public class ProfileActivity extends AppCompatActivity implements BottomNavigati
         });
 
 
-
     }
 
     @Override
@@ -91,7 +89,7 @@ public class ProfileActivity extends AppCompatActivity implements BottomNavigati
         super.onStart();
     }
 
-    private void setUp(){
+    private void setUp() {
         profilename = findViewById(R.id.etProfilename);
         profilecontact = findViewById(R.id.etProfilecontact);
         profileemail = findViewById(R.id.etProfilemail);
@@ -102,25 +100,26 @@ public class ProfileActivity extends AppCompatActivity implements BottomNavigati
         btnchangemailpass = findViewById(R.id.btnChangemailpass);
 
     }
+
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.homeicon:
                 Toast.makeText(getApplicationContext(), "You are now at the Home Page!", Toast.LENGTH_SHORT).show();
-                startActivity (new Intent (ProfileActivity.this,MainActivity.class));
+                startActivity(new Intent(ProfileActivity.this, MainActivity.class));
                 break;
 
             case R.id.flatinfoicon:
                 Toast.makeText(getApplicationContext(), "You are now at the Personal Listings Page!", Toast.LENGTH_SHORT).show();
-                startActivity (new Intent (ProfileActivity.this,MyRentalActivity.class));
+                startActivity(new Intent(ProfileActivity.this, MyRentalActivity.class));
                 break;
 
             case R.id.sellicon:
                 Toast.makeText(getApplicationContext(), "You are now at the Create Listing Page!", Toast.LENGTH_SHORT).show();
-                startActivity (new Intent (ProfileActivity.this,CreateListingActivity.class));
+                startActivity(new Intent(ProfileActivity.this, CreateListingActivity.class));
                 break;
             case R.id.profileicon:
-                Toast.makeText(getApplicationContext(), "You are already at the profil page!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "You are already at the profile page!", Toast.LENGTH_SHORT).show();
 
         }
         return true;

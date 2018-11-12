@@ -39,6 +39,9 @@
 
         <activity android:name=".MyRentalActivity" />
         <activity android:name=".EditListingActivity"></activity>
+        <activity android:name=".RentalEstimatePrice"
+                android:theme="@style/AppTheme.CustomTheme"
+            ></activity>
     </application>
 
 </manifest>

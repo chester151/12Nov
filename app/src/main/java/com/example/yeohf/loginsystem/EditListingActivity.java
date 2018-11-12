@@ -14,7 +14,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
-import com.example.yeohf.loginsystem.Entity.Rental;
+import com.example.yeohf.loginsystem.Entity.Listing;
 import com.example.yeohf.loginsystem.Entity.UserProfile;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -39,32 +39,30 @@ public class EditListingActivity extends AppCompatActivity {
     private RadioButton listtype2;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_listing);
 
-        titleet=(EditText)findViewById(R.id.titleet);
-        priceet=(EditText)findViewById(R.id.priceet);
-        backbtn=(Button)findViewById(R.id.backbtn);
-        submitbtn=(Button)findViewById(R.id.submitbtn);
+        titleet = (EditText) findViewById(R.id.titleet);
+        priceet = (EditText) findViewById(R.id.priceet);
+        backbtn = (Button) findViewById(R.id.backbtn);
+        submitbtn = (Button) findViewById(R.id.submitbtn);
         listingType2 = findViewById(R.id.rentalresaleradio2);
 
 
-        Intent intent= getIntent();
-        String rentalid= intent.getStringExtra("key");
+        Intent intent = getIntent();
+        String rentalid = intent.getStringExtra("key");
 
 
-
-        firebaseAuth= FirebaseAuth.getInstance();
-        firebaseDatabase=FirebaseDatabase.getInstance();
-        myref= firebaseDatabase.getReference("Rentals").child(rentalid);
-        DatabaseReference databaseReference= myref;
+        firebaseAuth = FirebaseAuth.getInstance();
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        myref = firebaseDatabase.getReference("Rentals").child(rentalid);
+        DatabaseReference databaseReference = myref;
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                Rental r=dataSnapshot.getValue(Rental.class);
+                Listing r = dataSnapshot.getValue(Listing.class);
                 titleet.setText(r.getTitle());
                 priceet.setText(r.getPrice());
 
@@ -80,7 +78,7 @@ public class EditListingActivity extends AppCompatActivity {
         backbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(EditListingActivity.this,MyRentalActivity.class));
+                startActivity(new Intent(EditListingActivity.this, MyRentalActivity.class));
             }
         });
 
@@ -88,16 +86,16 @@ public class EditListingActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 listtype2 = findViewById(listingType2.getCheckedRadioButtonId());
-                final String newtitle= titleet.getText().toString();
-                final String newprice= priceet.getText().toString();
-                final String newtype= listtype2.getText().toString();
-                Log.d("SUBMITED:",newtype);
+                final String newtitle = titleet.getText().toString();
+                final String newprice = priceet.getText().toString();
+                final String newtype = listtype2.getText().toString();
+                Log.d("SUBMITED:", newtype);
 
-                DatabaseReference databaseReference2= myref;
+                DatabaseReference databaseReference2 = myref;
                 databaseReference2.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        Rental r=dataSnapshot.getValue(Rental.class);
+                        Listing r = dataSnapshot.getValue(Listing.class);
                         r.setTitle(newtitle);
                         r.setPrice(newprice);
                         r.setListingType(newtype);

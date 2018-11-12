@@ -11,7 +11,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.yeohf.loginsystem.Entity.Rental;
+import com.example.yeohf.loginsystem.Entity.Listing;
 import com.example.yeohf.loginsystem.R;
 import com.squareup.picasso.Picasso;
 
@@ -19,12 +19,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-public class RentalListAdapter extends ArrayAdapter<Rental> {
+public class ListingListAdapter extends ArrayAdapter<Listing> {
 
     private Activity context;
-    private List<Rental> rentalList;
-    private ArrayList<Rental> tempRentalList;
-    public RentalListAdapter(Activity context, List<Rental> rentalList) {
+    private List<Listing> rentalList;
+    private ArrayList<Listing> tempRentalList;
+    public ListingListAdapter(Activity context, List<Listing> rentalList) {
         super(context,R.layout.rental_layout, rentalList);
         this.context=context;
         this.rentalList= rentalList;
@@ -47,7 +47,7 @@ public class RentalListAdapter extends ArrayAdapter<Rental> {
         TextView rentalStorey = listViewItem.findViewById(R.id.lblStorey);
         ImageView rentalPic = listViewItem.findViewById(R.id.imageViewRental);
 
-        Rental rental= rentalList.get(position);
+        Listing rental= rentalList.get(position);
         rentaltitle.setText(rental.getTitle());
         rentalListingType.setText(rental.getListingType());
         rentalprice.setText("$" + rental.getPrice());
@@ -83,7 +83,7 @@ public class RentalListAdapter extends ArrayAdapter<Rental> {
                     listingtype = "Both";
                     break;
             }
-            for (Rental rent : tempRentalList) {
+            for (Listing rent : tempRentalList) {
                 if (rent.getZone().equals(zone) && rent.getStorey().equals(storey) &&
                         rent.getType().equals(type) && rent.getModel().equals(model) &&
                         rent.getZone().equals(zone) && rent.getStorey().equals(storey) &&
@@ -103,7 +103,7 @@ public class RentalListAdapter extends ArrayAdapter<Rental> {
         if (charText.length() == 0) {
             rentalList.addAll(tempRentalList);
         } else {
-            for (Rental rent : tempRentalList) {
+            for (Listing rent : tempRentalList) {
                 if (rent.getTitle().toLowerCase().contains(charText) ||
                         rent.getAddress().toLowerCase().contains(charText)) {
                     rentalList.add(rent);
@@ -115,8 +115,8 @@ public class RentalListAdapter extends ArrayAdapter<Rental> {
 
     public void reset() {
         rentalList.clear();
-            for (Rental rent : tempRentalList) {
-                    rentalList.add(rent);
+        for (Listing rent : tempRentalList) {
+            rentalList.add(rent);
         }
         notifyDataSetChanged();
     }

@@ -8,7 +8,6 @@ public class UserProfile {
 
     public UserProfile(){
 
-
     }
 
     public UserProfile(String username, String usercontact){

@@ -19,8 +19,8 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.example.yeohf.loginsystem.Adapters.RentalListAdapter;
-import com.example.yeohf.loginsystem.Entity.Rental;
+import com.example.yeohf.loginsystem.Adapters.ListingListAdapter;
+import com.example.yeohf.loginsystem.Entity.Listing;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -35,24 +35,24 @@ import java.util.Locale;
 
 
 public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
-    private static final String TAG ="Main Activity" ;
+    private static final String TAG = "Main Activity";
     private Toolbar mToolbar;
     private FirebaseAuth mAuth;
     ListView listViewOverallRentals;
     FirebaseUser currentuser;
-    List<Rental> overall_rentallist;
+    List<Listing> overall_rentallist;
     DatabaseReference database_allref;
     EditText searchRental;
     FloatingActionButton filter;
     Button reset;
-    RentalListAdapter adapter;
+    ListingListAdapter adapter;
     Menu menu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_screen);
-        Log.d(TAG,"In Main Activity");
+        Log.d(TAG, "In Main Activity");
         overall_rentallist = new ArrayList<>();
         mAuth = FirebaseAuth.getInstance();
         currentuser = mAuth.getCurrentUser();
@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.navigation_view3);
         bottomNavigationView.setOnNavigationItemSelectedListener(this);
-        for(int i=0;i<bottomNavigationView.getMenu().size();i++){
+        for (int i = 0; i < bottomNavigationView.getMenu().size(); i++) {
             bottomNavigationView.getMenu().getItem(i).setChecked(false);
         }
         MenuItem menuitem = bottomNavigationView.getMenu().findItem(R.id.homeicon);
@@ -107,7 +107,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                 overall_rentallist.clear();
                 Iterable<DataSnapshot> child = dataSnapshot.getChildren();
                 for (DataSnapshot uniquesnap : child) {
-                    Rental rental = uniquesnap.getValue(Rental.class);
+                    Listing rental = uniquesnap.getValue(Listing.class);
                     overall_rentallist.add(rental);
                 }
                /* overall_rentallist.clear();
@@ -118,7 +118,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                     }
                 }*/
                 // Toast.makeText(getApplicationContext(), "Cool!", Toast.LENGTH_SHORT).show();
-                adapter = new RentalListAdapter(MainActivity.this, overall_rentallist);
+                adapter = new ListingListAdapter(MainActivity.this, overall_rentallist);
                 listViewOverallRentals.setAdapter(adapter);
                 Intent intent = getIntent();
                 Bundle extras = intent.getExtras();
@@ -126,6 +126,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                     adapter.filter(extras);
                 }
             }
+
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
@@ -144,7 +145,9 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
             @Override
             public void afterTextChanged(Editable s) {
                 String text = searchRental.getText().toString().toLowerCase(Locale.getDefault());
-                adapter.filter(text);
+                if (adapter != null) {
+                    adapter.filter(text);
+                }
             }
         });
         reset.setOnClickListener(new View.OnClickListener() {
@@ -158,14 +161,13 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        this.menu=menu;
+        this.menu = menu;
         getMenuInflater().inflate(R.menu.menu, menu);
-        if(currentuser==null){
+        if (currentuser == null) {
             MenuItem logitem = menu.findItem(R.id.logoutMenu);
             logitem.setTitle("Login");
 
-        }
-        else{
+        } else {
             MenuItem logitem = menu.findItem(R.id.logoutMenu);
             logitem.setTitle("Logout");
 
@@ -180,7 +182,6 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     }
 
 
-
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
@@ -191,30 +192,29 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
             case R.id.flatinfoicon:
                 //checks if user is logged in. If not- proceed to log in screen first.
-                if(currentuser==null){
+                if (currentuser == null) {
                     Toast.makeText(getApplicationContext(), "You have to be logged in to see your flats!", Toast.LENGTH_SHORT).show();
-                    startActivity (new Intent (MainActivity.this,StartActivity.class));
-                }
-                else{
+                    startActivity(new Intent(MainActivity.this, StartActivity.class));
+                } else {
                     Toast.makeText(getApplicationContext(), "You may edit your flat listings!", Toast.LENGTH_SHORT).show();
-                    startActivity (new Intent (MainActivity.this,MyRentalActivity.class));
+                    startActivity(new Intent(MainActivity.this, MyRentalActivity.class));
                 }
                 break;
 
             case R.id.sellicon:
-                if(currentuser==null){
+                if (currentuser == null) {
                     Toast.makeText(getApplicationContext(), "You have to be logged in to rent/sell your property!!", Toast.LENGTH_SHORT).show();
-                    startActivity (new Intent (MainActivity.this,StartActivity.class));
+                    startActivity(new Intent(MainActivity.this, StartActivity.class));
                 }
                 Intent intent = new Intent(MainActivity.this, CreateListingActivity.class);
                 startActivity(intent);
                 break;
             case R.id.profileicon:
-                if(currentuser==null){
+                if (currentuser == null) {
                     Toast.makeText(getApplicationContext(), "You have to be logged in to rent/sell your property!!", Toast.LENGTH_SHORT).show();
-                    startActivity (new Intent (MainActivity.this,StartActivity.class));
+                    startActivity(new Intent(MainActivity.this, StartActivity.class));
                 }
-                startActivity (new Intent (MainActivity.this,ProfileActivity.class));
+                startActivity(new Intent(MainActivity.this, ProfileActivity.class));
         }
         return true;
     }
@@ -231,11 +231,10 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
         switch (item.getItemId()) {
             case R.id.logoutMenu:
-                if(currentuser==null){
+                if (currentuser == null) {
                     Toast.makeText(getApplicationContext(), "Enter your details to Log in!", Toast.LENGTH_SHORT).show();
                     startActivity(new Intent(MainActivity.this, StartActivity.class));
-                }
-                else{
+                } else {
                     logout();
                 }
                 break;

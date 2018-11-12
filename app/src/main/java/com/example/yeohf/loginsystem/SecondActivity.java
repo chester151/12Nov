@@ -11,8 +11,8 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.example.yeohf.loginsystem.Adapters.RentalListAdapter;
-import com.example.yeohf.loginsystem.Entity.Rental;
+import com.example.yeohf.loginsystem.Adapters.ListingListAdapter;
+import com.example.yeohf.loginsystem.Entity.Listing;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -26,8 +26,8 @@ import java.util.List;
 public class SecondActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
     ListView listViewPersonalRentals;
     ListView listViewOverallRentals;
-    List<Rental> personal_rentallist;
-    List<Rental> overall_rentallist;
+    List<Listing> personal_rentallist;
+    List<Listing> overall_rentallist;
     DatabaseReference database_ownref;
     DatabaseReference database_allref;
     FirebaseAuth firebaseauth;
@@ -58,10 +58,10 @@ public class SecondActivity extends AppCompatActivity implements BottomNavigatio
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 personal_rentallist.clear();
                 for (DataSnapshot rentalsnapshot : dataSnapshot.getChildren()) {
-                    Rental rental = rentalsnapshot.getValue(Rental.class);
+                    Listing rental = rentalsnapshot.getValue(Listing.class);
                     personal_rentallist.add(rental);
                 }
-                RentalListAdapter adapter = new RentalListAdapter(SecondActivity.this, personal_rentallist);
+                ListingListAdapter adapter = new ListingListAdapter(SecondActivity.this, personal_rentallist);
                 listViewPersonalRentals.setAdapter(adapter);
             }
 
@@ -93,12 +93,12 @@ public class SecondActivity extends AppCompatActivity implements BottomNavigatio
                 overall_rentallist.clear();
                 for (DataSnapshot uniquekeySnapshot : dataSnapshot.getChildren()) {
                     for (DataSnapshot rentalzsnapshot : uniquekeySnapshot.getChildren()) {
-                        Rental rental2 = rentalzsnapshot.getValue(Rental.class);
+                        Listing rental2 = rentalzsnapshot.getValue(Listing.class);
                         overall_rentallist.add(rental2);
                     }
                 }
                 Toast.makeText(getApplicationContext(), "Cool!", Toast.LENGTH_SHORT).show();
-                RentalListAdapter adapter2 = new RentalListAdapter(SecondActivity.this, overall_rentallist);
+                ListingListAdapter adapter2 = new ListingListAdapter(SecondActivity.this, overall_rentallist);
                 listViewOverallRentals.setAdapter(adapter2);
             }
 

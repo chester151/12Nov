@@ -139,6 +139,22 @@ public class RentalDetailsActivity extends AppCompatActivity implements OnMapRea
                         getNearbyPlaces.execute(transferData);
                         Toast.makeText(getApplicationContext(), "Showing nearby clinics..", Toast.LENGTH_SHORT).show();
                         break;
+                    case "Restaurants":
+                        clearAndWriteMarker(gmap);
+                        url = getUrl(latitude, longitude, "restaurant");
+                        transferData[0] = gmap;
+                        transferData[1] = url;
+                        getNearbyPlaces.execute(transferData);
+                        Toast.makeText(getApplicationContext(), "Showing nearby restaurants..", Toast.LENGTH_SHORT).show();
+                        break;
+                    case "Schools":
+                        clearAndWriteMarker(gmap);
+                        url = getUrl(latitude, longitude, "school");
+                        transferData[0] = gmap;
+                        transferData[1] = url;
+                        getNearbyPlaces.execute(transferData);
+                        Toast.makeText(getApplicationContext(), "Showing nearby schools..", Toast.LENGTH_SHORT).show();
+                        break;
                 }
             }
 
