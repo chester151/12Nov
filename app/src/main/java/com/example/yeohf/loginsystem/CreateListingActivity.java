@@ -20,8 +20,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.yeohf.loginsystem.Adapters.RentalPriceEstimateAdapter;
-import com.example.yeohf.loginsystem.Entity.JSONModel;
 import com.example.yeohf.loginsystem.Entity.Listing;
 import com.example.yeohf.loginsystem.Helper.PricePrediction;
 import com.google.android.gms.common.api.Status;
@@ -100,7 +98,7 @@ public class CreateListingActivity extends AppCompatActivity implements BottomNa
                 LatLng latlng = place.getLatLng();
                 lat = latlng.latitude;
                 lng = latlng.longitude;
-                address = place.getName().toString();
+                address = place.getAddress().toString();
                 // TODO: Get info about the selected place.
             }
 
